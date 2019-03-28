@@ -1,13 +1,10 @@
 String gcode[n_lines] = {
-  "G0 X1920 Y4002 Z0 A0",
-  "G0 X24400 Y3223 Z123 A1 B2 C345",
-  "G0 X55500 Y5532 Z0 A2"
+  "G0 X1920 Y4002 Z340 A0 B1 C2",
+  "G0 X2440 Y3223 Z123 A1 B2 C3",
+  "G0 X5550 Y5532 Z333 A1 B2 C5"
 };
 
 long gcode_line_buffer[6];
-
-
-//char c_axis; //current axis in the scan
 char c_axis[6] = {'X','Y','Z','A','B','C'};
 
 void gcode_read(unsigned int line){
