@@ -86,8 +86,6 @@ void menuHandler(){
   lcd_main_menu(500,cTime);
 }
 
-bool alternate=true;
-
 void loop(){
   cTime=millis();
 
@@ -103,9 +101,8 @@ void loop(){
   //   current_line++;
   // }
 
-  if(!y_axis.isRunning()){ //cambiar por steps left
+  if(!y_axis.isRunning() && !x_axis.isRunning()){ //cambiar por steps left
     gcode_read(current_line);
-    alternate=false;
     current_line++;
   }
 
