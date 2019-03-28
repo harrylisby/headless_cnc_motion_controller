@@ -1,11 +1,10 @@
 String gcode[n_lines] = {
   "G0 X1920 Y4002 Z0 A0",
-  "G0 X24400 Y3223 Z123 A1 B2 C345",
-  "G0 X55500 Y5532 Z0 A2"
+  "G0 X24400 Y3223 Z0 A0",
+  "G0 X55500 Y5532 Z0 A0"
 };
 
 long gcode_line_buffer[6];
-
 
 //char c_axis; //current axis in the scan
 char c_axis[6] = {'X','Y','Z','A','B','C'};
@@ -15,8 +14,8 @@ void gcode_read(unsigned int line){
     int n_axis=0; //number of axis in the scan
     while(n_axis<axis_to_read){
       unsigned int line_length = gcode[line].length(); //used to not run forever
-      static unsigned int s_pos;
-      static unsigned int f_pos;
+      unsigned int s_pos = 0;
+      unsigned int f_pos = 0;
       while(gcode[line].charAt(s_pos)!=c_axis[n_axis]){ //look for axis name in string
         s_pos++;
       }

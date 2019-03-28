@@ -7,6 +7,9 @@ void lcd_main_menu(int update_rate_mainMenu,unsigned long current_time){
     lcd.setCursor(0,0);
     lcd.print("X:");
     lcd.print(x_axis.currentPosition());
+    lcd.print("  ");
+    lcd.print(x_axis.isRunning());
+    lcd.print(y_axis.isRunning());
     lcd.setCursor(0,1);
     lcd.print("Y:");
     lcd.print(y_axis.currentPosition());
