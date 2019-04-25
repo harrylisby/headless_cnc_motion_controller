@@ -1,27 +1,26 @@
 String gcode[n_lines] = {
   "G0 X1920 Y4002 Z0 A0",
-  "G0 X24400 Y3223 Z123 A1 B2 C345",
-  "G0 X55500 Y5532 Z0 A2"
+  "G0 X24400 Y3223 Z0 A0",
+  "G0 X55500 Y5532 Z0 A0"
 };
 
 long gcode_line_buffer[6];
 
-
 //char c_axis; //current axis in the scan
 char c_axis[6] = {'X','Y','Z','A','B','C'};
 
-void gcode_read(unsigned int line){
-  if(gcode[line].substring(0,2)=="G0"){
+void gcode_read(String line){
+  if(line.substring(0,2)=="G0"){
     int n_axis=0; //number of axis in the scan
     while(n_axis<axis_to_read){
-      unsigned int line_length = gcode[line].length(); //used to not run forever
-      static unsigned int s_pos;
-      static unsigned int f_pos;
-      while(gcode[line].charAt(s_pos)!=c_axis[n_axis]){ //look for axis name in string
+      unsigned int line_length = line.length(); //used to not run forever
+      unsigned int s_pos = 0;
+      unsigned int f_pos = 0;
+      while(line.charAt(s_pos)!=c_axis[n_axis]){ //look for axis name in string
         s_pos++;
       }
       f_pos=s_pos; //set final pos to start from s_pos found
-      while(gcode[line].charAt(f_pos)!=' '){//look for whitespace after X
+      while(line.charAt(f_pos)!=' '){//look for whitespace after X
         f_pos++;
         if(f_pos==line_length){ //stop if line length has been reached
           f_pos=line_length;
@@ -29,7 +28,7 @@ void gcode_read(unsigned int line){
         }
       }
 
-      gcode_line_buffer[n_axis]=atol(gcode[line].substring(s_pos+1,f_pos).c_str()); //save to vector buffer
+      gcode_line_buffer[n_axis]=atol(line.substring(s_pos+1,f_pos).c_str()); //save to vector buffer
       n_axis++; //next time read another axis
     }
 
