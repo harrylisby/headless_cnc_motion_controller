@@ -38,8 +38,8 @@ uint32_t encoder_position = 0;
 
 RipppleEncoder knob(ENC_PIN_A,ENC_PIN_B,ENC_BUTTON);
 
-AccelStepper x_axis(AccelStepper::DRIVER, PA4, PA5);
-AccelStepper y_axis(AccelStepper::DRIVER, PA6, PA7);
+AccelStepper x_axis(AccelStepper::DRIVER, PB12, PB13);
+AccelStepper y_axis(AccelStepper::DRIVER, PB14, PB15);
 // AccelStepper z_axis(AccelStepper::DRIVER, PA6, PA7);
 // AccelStepper a_axis(AccelStepper::DRIVER, PA6, PA7);
 // AccelStepper b_axis(AccelStepper::DRIVER, PA6, PA7);
@@ -82,20 +82,10 @@ void setup(){
   y_axis.setPinsInverted(true,true,false);
   y_axis.setMinPulseWidth(5);
 
-  Serial.begin(115200);
-
-  while (!Serial);
-
-  delay(1000);
-  //Serial.print("Initializing SD card...");
-
   //pin CS del adaptador microSD conectado al puerto PA3 del bluepill
   if (!SD.begin(SD_PIN)) {
-    Serial.println("initialization failed!");
     return;
   }
-  //Serial.println("initialization done.");
-
   //Abre el archivo para leer
   myFile = SD.open("test.txt");
 }
@@ -131,13 +121,10 @@ void menuHandler(){
 }
 
 void loop(){
-  cTime=millis();
-
   if (myFile) {
-
     //mientras haya información en el archivo a leer
     while (myFile.available()) {
-
+      cTime=millis();
       //lea la línea y envíela a ser interpretada
       if(!y_axis.isRunning() && !x_axis.isRunning() && !alarm){ //cambiar por steps left
         contador = current_line;
@@ -146,12 +133,10 @@ void loop(){
         if(!prevent_skip)current_line++;
         prevent_skip=false;
       }
-
       if(cTime-lastTime_enc>(1/enc_update_rate))encoderHandler();
       menuHandler();
       x_axis.run();
       y_axis.run();
-
       if (alarm){
         x_axis.stop();
         y_axis.stop();
@@ -160,8 +145,5 @@ void loop(){
     }
     //cierra el archivo y reinicia el contador
     myFile.close();
-
-  } else {
-    //Serial.println("error opening test.txt");
   }
 }
