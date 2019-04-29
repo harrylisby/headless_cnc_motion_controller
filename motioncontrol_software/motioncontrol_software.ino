@@ -1,27 +1,38 @@
 #include <AccelStepper.h>
 #include <LiquidCrystal_I2C.h>
 #include <RipppleEncoder.h>
+#include "parameters.h"
 #include <SPI.h>
 #include "SdFat.h"
 
 LiquidCrystal_I2C lcd(0x27,16,2);
 
-#define n_lines 3
-#define axis_to_read 2
-#define SD_PIN PA3
+SdFat SD;
+File myFile;
+String buffer;
 
 const byte ENC_PIN_A = PB12;
 const byte ENC_PIN_B = PB13;
 const byte ENC_BUTTON = PB14;
 
-SdFat SD;
-File myFile;
-String buffer;
+const byte output_relay1 = PB15;
+const byte output_relay2 = PA8;
+const byte output_relay3 = PA9;
+const byte output_relay4 = PA10;
+const byte output_relay5 = PA11;
 
-float parameter_feedrate = 10000.00;
-float parameter_acceleration = 500.00;
+const byte output_mosfet1 = PB8;
+const byte output_mosfet2 = PB9;
+const byte output_mosfet3 = PA0;
+const byte output_mosfet4 = PA1;
+
+bool output_state_relay1,output_state_relay2,output_state_relay3,output_state_relay4,output_state_relay5;
+bool output_state_mosfet1,output_state_mosfet2,output_state_mosfet3,output_state_mosfet4;
 unsigned long current_line = 0;
 bool flag_execution = true;
+bool prevent_skip;
+bool alarm = false;
+int contador = 0;
 
 uint32_t encoder_position = 0;
 
@@ -49,6 +60,15 @@ void setup(){
   pinMode(PA5,OUTPUT_OPEN_DRAIN);
   pinMode(PA6,OUTPUT);
   pinMode(PA7,OUTPUT);
+  pinMode(output_relay1,OUTPUT);
+  pinMode(output_relay2,OUTPUT);
+  pinMode(output_relay3,OUTPUT);
+  pinMode(output_relay4,OUTPUT);
+  pinMode(output_relay5,OUTPUT);
+  pinMode(output_mosfet1,OUTPUT);
+  pinMode(output_mosfet2,OUTPUT);
+  pinMode(output_mosfet3,OUTPUT);
+  pinMode(output_mosfet4,OUTPUT);
 
   x_axis.setMaxSpeed(10000.0);
   x_axis.setAcceleration(5000.0);
@@ -62,15 +82,16 @@ void setup(){
   y_axis.setPinsInverted(true,true,false);
   y_axis.setMinPulseWidth(5);
 
-  //Serial.begin(115200);
+  Serial.begin(115200);
 
-  //while (!Serial);
+  while (!Serial);
 
+  delay(1000);
   //Serial.print("Initializing SD card...");
 
   //pin CS del adaptador microSD conectado al puerto PA3 del bluepill
   if (!SD.begin(SD_PIN)) {
-    //Serial.println("initialization failed!");
+    Serial.println("initialization failed!");
     return;
   }
   //Serial.println("initialization done.");
@@ -113,31 +134,34 @@ void loop(){
   cTime=millis();
 
   if (myFile) {
-    Serial.println("test.txt:");
 
     //mientras haya información en el archivo a leer
     while (myFile.available()) {
 
       //lea la línea y envíela a ser interpretada
-      if(!y_axis.isRunning() && !x_axis.isRunning()){ //cambiar por steps left
-    
+      if(!y_axis.isRunning() && !x_axis.isRunning() && !alarm){ //cambiar por steps left
+        contador = current_line;
         buffer = myFile.readStringUntil('\n');
         gcode_read(buffer);
-        //contador++;
+        if(!prevent_skip)current_line++;
+        prevent_skip=false;
       }
 
       if(cTime-lastTime_enc>(1/enc_update_rate))encoderHandler();
       menuHandler();
       x_axis.run();
-      y_axis.run();    
-    }
+      y_axis.run();
 
-    //Serial.println(contador);
+      if (alarm){
+        x_axis.stop();
+        y_axis.stop();
+        myFile.close();
+      }    
+    }
     //cierra el archivo y reinicia el contador
     myFile.close();
-    //contador = 0;
 
   } else {
-    Serial.println("error opening test.txt");
+    //Serial.println("error opening test.txt");
   }
 }
