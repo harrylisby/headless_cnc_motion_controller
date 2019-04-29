@@ -82,6 +82,12 @@ void setup(){
   y_axis.setPinsInverted(true,true,false);
   y_axis.setMinPulseWidth(5);
 
+  Serial.begin(115200);
+
+  while (!Serial);
+
+  delay(5000);
+
   //pin CS del adaptador microSD conectado al puerto PA3 del bluepill
   if (!SD.begin(SD_PIN)) {
     return;

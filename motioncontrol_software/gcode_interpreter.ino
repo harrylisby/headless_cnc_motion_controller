@@ -1,5 +1,5 @@
 long gcode_line_buffer[6];
-char c_axis[6] = {'X','Y','Z','A','B','C'};
+char c_axis[7] = {'X','Y','Z','A','B','C','.'};
 
 void setAxisParameters(AccelStepper &axis, long direction, int type = 0){
   switch (type) {
@@ -19,7 +19,7 @@ void setAxisParameters(AccelStepper &axis, long direction, int type = 0){
   axis.moveTo(direction);
 }
 
-void gcode_read(String line){
+void gcode_read(String line){	
 	if(!checkLine(line)){
 		Serial.println("Error");
 		Serial.println(line);
@@ -42,11 +42,14 @@ void gcode_read(String line){
 	          		f_pos=line_length;
 	          		break;
 	        	}
+	        	if(line.charAt(f_pos) == '.'){ f_pos++; }
 	        }
 
 	        gcode_line_buffer[n_axis]=atol(line.substring(s_pos+1,f_pos).c_str()); //save to vector buffer
 	        n_axis++; //next time read another axis
 	    }
+	   	Serial.println(gcode_line_buffer[0]);
+	    Serial.println(gcode_line_buffer[1]);	
 	    setAxisParameters(x_axis, gcode_line_buffer[0], 1);
 	      // x_axis.setMaxSpeed(parameter_feedrate);
 	      // x_axis.setAcceleration(parameter_max_acceleration);
@@ -75,11 +78,12 @@ void gcode_read(String line){
 	    int n_axis=0; //number of axis in the scan
 	    while(n_axis<axis_to_read){
 	      	unsigned long line_length = line.length(); //used to not run forever
-	      	unsigned long s_pos = 3;
+	      	unsigned long s_pos = 0;
 	      	unsigned long f_pos = 0;
 	      	while(line.charAt(s_pos)!=c_axis[n_axis]){ //look for axis name in string
-	        	s_pos++;
+	        	s_pos++;	
 	      	}
+
 	      	f_pos=s_pos+1; //set final pos to start from s_pos found
 	      	while(line.charAt(f_pos) != ' ' && isDigit(line.charAt(f_pos))){//look for whitespace after X
 	        	f_pos++;
@@ -90,7 +94,10 @@ void gcode_read(String line){
 	      	}
 	      	gcode_line_buffer[n_axis]=atol(line.substring(s_pos+1,f_pos).c_str()); //save to vector buffer
 	      	n_axis++; //next time read another axis
-	    }	
+	    }
+
+	    Serial.println(gcode_line_buffer[0]);
+	    Serial.println(gcode_line_buffer[1]);	
 	    setAxisParameters(x_axis, gcode_line_buffer[0]);
 	        //x_axis.setMaxSpeed(parameter_feedrate); //G1 runs at constant feedrate
 	        //x_axis.setAcceleration(parameter_acceleration);
