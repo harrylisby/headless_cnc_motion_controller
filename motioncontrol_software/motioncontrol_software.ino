@@ -82,6 +82,8 @@ void setup(){
   y_axis.setPinsInverted(true,true,false);
   y_axis.setMinPulseWidth(5);
 
+  Serial.begin(115200);
+
   //pin CS del adaptador microSD conectado al puerto PA3 del bluepill
   if (!SD.begin(SD_PIN)) {
     alarm = 2;
@@ -132,19 +134,24 @@ void loop(){
         contador = current_line;
         buffer = myFile.readStringUntil('\n');
         gcode_read(buffer);
-        if(!prevent_skip)current_line++;
-        prevent_skip=false;
       }
       if(cTime-lastTime_enc>(1/enc_update_rate))encoderHandler();
       menuHandler();
       x_axis.run();
       y_axis.run();
-      if (alarm){
+      if (alarm != 0){
         x_axis.stop();
         y_axis.stop();
         myFile.close();
-      }    
+      }
+      if(prevent_skip){
+        Serial.println("entró");
+        myFile.seek(0);
+        prevent_skip = false;
+      }
     }
+    cTime=millis();
+    menuHandler();
     //cierra el archivo y reinicia el contador
     myFile.close();
   }

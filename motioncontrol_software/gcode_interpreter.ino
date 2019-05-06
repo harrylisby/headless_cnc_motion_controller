@@ -19,7 +19,8 @@ void setAxisParameters(AccelStepper &axis, long direction, int type = 0){
   axis.moveTo(direction);
 }
 
-void gcode_read(String line){	
+void gcode_read(String line){
+	Serial.println(line);
 	if(!checkLine(line)){
 		Serial.println("Error");
 		Serial.println(line);
@@ -112,9 +113,8 @@ void gcode_read(String line){
 
 
 	}else if(line.substring(0,3)=="G70"){
-	    //current_line=0;
+	    current_line=0;
 		prevent_skip=true;
-	    //line=0;
 
   	}else if(line.substring(0,3)=="G94"){
 	  	int val = 4;
