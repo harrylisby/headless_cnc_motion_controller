@@ -1,4 +1,4 @@
-long gcode_line_buffer[6];
+float gcode_line_buffer[6];
 char c_axis[7] = {'X','Y','Z','A','B','C','.'};
 
 void setAxisParameters(AccelStepper &axis, long direction, int type = 0){
@@ -44,8 +44,7 @@ void gcode_read(String line){
 	        	}
 	        	if(line.charAt(f_pos) == '.'){ f_pos++; }
 	        }
-
-	        gcode_line_buffer[n_axis]=atol(line.substring(s_pos+1,f_pos).c_str()); //save to vector buffer
+	        gcode_line_buffer[n_axis]=atof(line.substring(s_pos+1,f_pos).c_str()); //save to vector buffer
 	        n_axis++; //next time read another axis
 	    }
 	   	Serial.println(gcode_line_buffer[0]);
@@ -85,15 +84,16 @@ void gcode_read(String line){
 	      	}
 
 	      	f_pos=s_pos+1; //set final pos to start from s_pos found
-	      	while(line.charAt(f_pos) != ' ' && isDigit(line.charAt(f_pos))){//look for whitespace after X
+	        while(line.charAt(f_pos)!=' ' && isDigit(line.charAt(f_pos))){//look for whitespace after X
 	        	f_pos++;
 	        	if(f_pos==line_length){ //stop if line length has been reached
 	          		f_pos=line_length;
 	          		break;
 	        	}
-	      	}
-	      	gcode_line_buffer[n_axis]=atol(line.substring(s_pos+1,f_pos).c_str()); //save to vector buffer
-	      	n_axis++; //next time read another axis
+	        	if(line.charAt(f_pos) == '.'){ f_pos++; }
+	        }
+	        gcode_line_buffer[n_axis]=atof(line.substring(s_pos+1,f_pos).c_str()); //save to vector buffer
+	        n_axis++; //next time read another axis
 	    }
 
 	    Serial.println(gcode_line_buffer[0]);
