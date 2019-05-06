@@ -27,13 +27,17 @@ void lcd_main_menu(int update_rate_mainMenu,unsigned long current_time){
     // lcd.print("E:");
     // lcd.print(encoder_position);
   }
-  if(alarm){
+  if(alarm == 1){
   	lcd.clear();
   	lcd.setCursor(0,0);
   	lcd.print("L. Invalida");
   	lcd.setCursor(0,1);
   	lcd.print("N: ");
   	lcd.print(contador);
-  	delay(10000);
+  }
+  if(alarm == 2){
+	lcd.clear();
+	lcd.setCursor(0,0);
+	lcd.print("Error en SD");
   }
 }

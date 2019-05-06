@@ -23,7 +23,7 @@ void gcode_read(String line){
 	if(!checkLine(line)){
 		Serial.println("Error");
 		Serial.println(line);
-		alarm = true;
+		alarm = 1;
 		return;
 	};
 	if(line.substring(0,2)=="G0"){
@@ -47,32 +47,25 @@ void gcode_read(String line){
 	        gcode_line_buffer[n_axis]=atof(line.substring(s_pos+1,f_pos).c_str()); //save to vector buffer
 	        n_axis++; //next time read another axis
 	    }
-	   	Serial.println(gcode_line_buffer[0]);
-	    Serial.println(gcode_line_buffer[1]);	
-	    setAxisParameters(x_axis, gcode_line_buffer[0], 1);
-	      // x_axis.setMaxSpeed(parameter_feedrate);
-	      // x_axis.setAcceleration(parameter_max_acceleration);
-	      // x_axis.moveTo(gcode_line_buffer[0]);
-    	setAxisParameters(y_axis, gcode_line_buffer[1], 1);
-	      // y_axis.setMaxSpeed(parameter_feedrate);
-	      // y_axis.setAcceleration(parameter_max_acceleration);
-	      // y_axis.moveTo(gcode_line_buffer[1]);
 
-	      // z_axis.setMaxSpeed(parameter_feedrate);
-	      // z_axis.setAcceleration(parameter_acceleration);
-	      // z_axis.moveTo(gcode_line_buffer[2]);
-	      //
-	      // a_axis.setMaxSpeed(parameter_feedrate);
-	      // a_axis.setAcceleration(parameter_acceleration);
-	      // a_axis.moveTo(gcode_line_buffer[3]);
-	      //
-	      // b_axis.setMaxSpeed(parameter_feedrate);
-	      // b_axis.setAcceleration(parameter_acceleration);
-	      // b_axis.moveTo(gcode_line_buffer[4]);
-	      //
-	      // c_axis.setMaxSpeed(parameter_feedrate);
-	      // c_axis.setAcceleration(parameter_acceleration);
-	      // c_axis.moveTo(gcode_line_buffer[5]);
+	    setAxisParameters(x_axis, gcode_line_buffer[0], 1);
+    	setAxisParameters(y_axis, gcode_line_buffer[1], 1);
+
+		// z_axis.setMaxSpeed(parameter_feedrate);
+		// z_axis.setAcceleration(parameter_acceleration);
+		// z_axis.moveTo(gcode_line_buffer[2]);
+		//
+		// a_axis.setMaxSpeed(parameter_feedrate);
+		// a_axis.setAcceleration(parameter_acceleration);
+		// a_axis.moveTo(gcode_line_buffer[3]);
+		//
+		// b_axis.setMaxSpeed(parameter_feedrate);
+		// b_axis.setAcceleration(parameter_acceleration);
+		// b_axis.moveTo(gcode_line_buffer[4]);
+		//
+		// c_axis.setMaxSpeed(parameter_feedrate);
+		// c_axis.setAcceleration(parameter_acceleration);
+		// c_axis.moveTo(gcode_line_buffer[5]);
 	}else if(line.substring(0,2)=="G1"){
 	    int n_axis=0; //number of axis in the scan
 	    while(n_axis<axis_to_read){
@@ -96,35 +89,26 @@ void gcode_read(String line){
 	        n_axis++; //next time read another axis
 	    }
 
-	    Serial.println(gcode_line_buffer[0]);
-	    Serial.println(gcode_line_buffer[1]);	
 	    setAxisParameters(x_axis, gcode_line_buffer[0]);
-	        //x_axis.setMaxSpeed(parameter_feedrate); //G1 runs at constant feedrate
-	        //x_axis.setAcceleration(parameter_acceleration);
-	        //x_axis.moveTo(gcode_line_buffer[0]);
-
 	    setAxisParameters(y_axis, gcode_line_buffer[1]);
-	       // y_axis.setMaxSpeed(parameter_feedrate); //G1 runs at constant feedrate
-	       // y_axis.setAcceleration(parameter_acceleration);
-	       // y_axis.moveTo(gcode_line_buffer[1]);
 
-	    	// setAxisParameters(z_axis, gcode_line_buffer[2]);
-	      // z_axis.setMaxSpeed(parameter_feedrate);
-	      // z_axis.setAcceleration(parameter_acceleration);
-	      // z_axis.moveTo(gcode_line_buffer[2]);
-	      
-	      // setAxisParameters(a_axis, gcode_line_buffer[3]);
-	      // a_axis.setMaxSpeed(parameter_feedrate);
-	      // a_axis.setAcceleration(parameter_acceleration);
-	      // a_axis.moveTo(gcode_line_buffer[3]);
-	      //
-	      // setAxisParameters(b_axis, gcode_line_buffer[4]);
-	      // b_axis.setAcceleration(parameter_acceleration);
-	      // b_axis.moveTo(gcode_line_buffer[4]);
-	      //
-	      // setAxisParameters(c_axis, gcode_line_buffer[5]);
-	      // c_axis.setAcceleration(parameter_acceleration);
-	      // c_axis.moveTo(gcode_line_buffer[5]);
+	    //setAxisParameters(z_axis, gcode_line_buffer[2]);
+		// z_axis.setMaxSpeed(parameter_feedrate);
+		// z_axis.setAcceleration(parameter_acceleration);
+		// z_axis.moveTo(gcode_line_buffer[2]);
+
+		// setAxisParameters(a_axis, gcode_line_buffer[3]);
+		// a_axis.setMaxSpeed(parameter_feedrate);
+		// a_axis.setAcceleration(parameter_acceleration);
+		// a_axis.moveTo(gcode_line_buffer[3]);
+		//
+		// setAxisParameters(b_axis, gcode_line_buffer[4]);
+		// b_axis.setAcceleration(parameter_acceleration);
+		// b_axis.moveTo(gcode_line_buffer[4]);
+		//
+		// setAxisParameters(c_axis, gcode_line_buffer[5]);
+		// c_axis.setAcceleration(parameter_acceleration);
+		// c_axis.moveTo(gcode_line_buffer[5]);
 
 
 	}else if(line.substring(0,3)=="G70"){

@@ -31,7 +31,7 @@ bool output_state_mosfet1,output_state_mosfet2,output_state_mosfet3,output_state
 unsigned long current_line = 0;
 bool flag_execution = true;
 bool prevent_skip;
-bool alarm = false;
+int alarm = 0;
 int contador = 0;
 
 uint32_t encoder_position = 0;
@@ -82,14 +82,10 @@ void setup(){
   y_axis.setPinsInverted(true,true,false);
   y_axis.setMinPulseWidth(5);
 
-  Serial.begin(115200);
-
-  while (!Serial);
-
-  delay(5000);
-
   //pin CS del adaptador microSD conectado al puerto PA3 del bluepill
   if (!SD.begin(SD_PIN)) {
+    alarm = 2;
+    menuHandler();
     return;
   }
   //Abre el archivo para leer
@@ -132,7 +128,7 @@ void loop(){
     while (myFile.available()) {
       cTime=millis();
       //lea la línea y envíela a ser interpretada
-      if(!y_axis.isRunning() && !x_axis.isRunning() && !alarm){ //cambiar por steps left
+      if(!y_axis.isRunning() && !x_axis.isRunning() && alarm == 0){ //cambiar por steps left
         contador = current_line;
         buffer = myFile.readStringUntil('\n');
         gcode_read(buffer);
