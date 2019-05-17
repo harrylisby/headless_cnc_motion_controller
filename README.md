@@ -1,4 +1,4 @@
-# STM32 Motion Controller
+# Headless STM32 based CNC Motion Controller
 
 The goal of this project is making a headless gcode interpreter to use in different automation applications where usually you seek of compactness but at the same time ease of use and installation. The main idea is being able to have an application that repeately runs a single program and can also expect external input, from sensors or switches.
 
