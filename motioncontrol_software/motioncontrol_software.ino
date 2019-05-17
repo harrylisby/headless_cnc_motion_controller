@@ -125,7 +125,6 @@ void menuHandler(){
 }
 
 void loop(){
-
   if (myFile) {
     //mientras haya información en el archivo a leer
     while (myFile.available()) {
@@ -152,7 +151,6 @@ void loop(){
       }
     }
     cTime=millis();
-
     menuHandler();
     //cierra el archivo y reinicia el contador
     myFile.close();
