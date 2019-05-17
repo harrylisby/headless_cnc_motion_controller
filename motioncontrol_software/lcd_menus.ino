@@ -8,8 +8,11 @@ void lcd_main_menu(int update_rate_mainMenu,unsigned long current_time){
     lcd.print("X:");
     lcd.print(x_axis.currentPosition());
     lcd.print("  ");
-    lcd.print(x_axis.isRunning());
-    lcd.print(y_axis.isRunning());
+
+    // lcd.print(x_axis.isRunning());
+    // lcd.print(y_axis.isRunning());
+    lcd.print(parameter_feedrate);
+
     lcd.setCursor(0,1);
     lcd.print("Y:");
     lcd.print(y_axis.currentPosition());
@@ -25,5 +28,18 @@ void lcd_main_menu(int update_rate_mainMenu,unsigned long current_time){
     // lcd.setCursor(9,1);
     // lcd.print("E:");
     // lcd.print(encoder_position);
+  }
+  if(alarm == 1){
+  	lcd.clear();
+  	lcd.setCursor(0,0);
+  	lcd.print("L. Invalida");
+  	lcd.setCursor(0,1);
+  	lcd.print("N: ");
+  	lcd.print(contador);
+  }
+  if(alarm == 2){
+	lcd.clear();
+	lcd.setCursor(0,0);
+	lcd.print("Error en SD");
   }
 }
