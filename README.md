@@ -16,3 +16,4 @@ It can also print the information to an I2C screen attached directly to the I2C 
 - I2C communication for multiple serial drivers.
 - Compatibility with ODrive.
 - Create an interface for I2C liquid display.
+- Circuit diagrams and pinout diagrams.
