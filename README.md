@@ -4,6 +4,8 @@ The goal of this project is making a headless gcode interpreter to use in differ
 
 With this motion controller you can get up to 6 axes running with external drivers.
 
+It reads a gcode file from an sd-card which can be easily adapted to this board only by soldering an sd-card adapter.
+
 It can also print the information to an I2C screen attached directly to the I2C bus.
 
 
