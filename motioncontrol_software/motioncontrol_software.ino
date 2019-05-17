@@ -120,10 +120,6 @@ void encoderHandler(){
   }
 }
 
-void menuHandler(){
-  lcd_main_menu(500,cTime);
-}
-
 void loop(){
 
   if (myFile) {
@@ -157,4 +153,8 @@ void loop(){
     //cierra el archivo y reinicia el contador
     myFile.close();
   }
+}
+
+void menuHandler(){
+  lcd_main_menu(500,cTime);
 }

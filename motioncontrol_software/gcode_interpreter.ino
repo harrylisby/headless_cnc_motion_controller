@@ -16,6 +16,7 @@ void setAxisParameters(AccelStepper &axis, long direction, int type = 0){
   	axis.setMaxSpeed(parameter_feedrate);
   	axis.setAcceleration(parameter_acceleration);
   	break;
+}
 
 void gcode_read(unsigned int line){
   if(gcode[line].substring(0,2)=="G0"){
@@ -67,6 +68,7 @@ void gcode_read(unsigned int line){
   axis.moveTo(direction);
 }
 
+
 void gcode_read(String line){
 	Serial.println(line);
 	if(!checkLine(line)){
@@ -74,7 +76,7 @@ void gcode_read(String line){
 		Serial.println(line);
 		alarm = 1;
 		return;
-	};
+	}
 	if(line.substring(0,2)=="G0"){
 	    int n_axis=0; //number of axis in the scan
 	    while(n_axis<axis_to_read){
@@ -122,7 +124,7 @@ void gcode_read(String line){
 	      	unsigned long s_pos = 0;
 	      	unsigned long f_pos = 0;
 	      	while(line.charAt(s_pos)!=c_axis[n_axis]){ //look for axis name in string
-	        	s_pos++;	
+	        	s_pos++;
 	      	}
 
 	      	f_pos=s_pos+1; //set final pos to start from s_pos found
@@ -228,7 +230,7 @@ bool checkLine(String line){
 				if(!isDigit(c)){ return false; }
 			}
 			else{ return false; }
-		}	
+		}
 	}
 	return true;
 }
